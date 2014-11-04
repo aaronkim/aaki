@@ -1,8 +1,4 @@
-project(aaki)
-
-cmake_minimum_required(VERSION 2.8)
-set(CMAKE_BUILD_TYPE "Debug")
-set(CMAKE_CXX_FLAGS "-g -Wall")
+message("Hello Aaki's cmake.")
 
 FUNCTION(fn_find_cfg result source_dir cfg_file)
 	STRING(REPLACE "/" ";" temp_list1 ${source_dir})
@@ -16,6 +12,7 @@ FUNCTION(fn_find_cfg result source_dir cfg_file)
 		if(EXISTS ${search_dir}/${cfg_file})
 			message("EXISTS_file : " ${search_dir}/${cfg_file})
 			set(${result} ${search_dir} PARENT_SCOPE)
+			set(CFG_ROOT2 $${result} PARENT_SCOPE)
 			break()
 		else()
 			list(REMOVE_AT temp_list2 -1)
@@ -23,20 +20,3 @@ FUNCTION(fn_find_cfg result source_dir cfg_file)
 	endforeach(temp1)
 ENDFUNCTION(fn_find_cfg)
 
-if(NOT CFG_ROOT)
-	fn_find_cfg(CFG_ROOT ${CMAKE_CURRENT_SOURCE_DIR} aaki-config.cmake)
-endif(NOT CFG_ROOT)
-
-if(CFG_ROOT)
-	include(${CFG_ROOT}/aaki-config.cmake OPTIONAL)
-	message("CFG_ROOT : " ${CFG_ROOT})
-else(CFG_ROOT)
-	message("CFG_ROOT : None!!!")
-	return()
-endif(CFG_ROOT)
-
-
-add_subdirectory (test)
-
-aux_source_directory(. SRC_LIST)
-add_executable(${PROJECT_NAME} ${SRC_LIST})
